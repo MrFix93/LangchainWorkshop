@@ -8,6 +8,9 @@ public class Main {
         Assistant assistant = Configuration.assistant();
 
         Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Dit is het begin van jouw gesprek met de Info Support swag shop chatbot!");
+
         while (scanner.hasNext()) {
             String in = scanner.nextLine();
 
