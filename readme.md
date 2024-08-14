@@ -21,17 +21,17 @@ LangChain4j maakt met het beginnen van AI in Java zo simpel als de volgende paar
 1. Voeg de LangChain4j dependency, en een LangChain4j model dependeny (zoals OpenAI) toe aan je project. Voorbeeld:
 
    ```xml
-   <dependency>
-   <groupId>dev.langchain4j</groupId>
-   <artifactId>langchain4j</artifactId>
-   <version>0.33.0</version>
-   </dependency>
+    <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j</artifactId>
+        <version>0.33.0</version>
+    </dependency>
 
-   <dependency>
-   <groupId>dev.langchain4j</groupId>
-   <artifactId>langchain4j-open-ai</artifactId>
-   <version>0.33.0</version>
-   </dependency>
+    <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-open-ai</artifactId>
+        <version>0.33.0</version>
+    </dependency>
    ```
 
 1. Indien van toepassing: verkrijg een API key voor de LLM provider. LangChain4j biedt op hun Github pagina een gratis demo key om met, onder andere, ChatGPT te kunnen testen.
@@ -46,6 +46,25 @@ LangChain4j maakt met het beginnen van AI in Java zo simpel als de volgende paar
    ```
 
 LangChain4j Github: https://github.com/langchain4j/langchain4j
+
+
+## Tools (Function Calling)
+
+Tools (of Function Calling) geeft je LLM de mogelijkheid om een of meer Tools aan te roepen om zo het gewenste resultaat te krijgen. Een Tool is wat je er zelf van maakt: een API aanroep, een database zoekopdracht, een stukje code uitvoeren, etc. De LLM roept de code niet direct aan, het model geeft de intentie aan om een Tool aan te roepen en LangChain4j zorgt ervoor dat de methode uitgevoerd wordt en het resultaat teruggegeven wordt aan de LLM. 
+
+Een klein voorbeeld: stel je wilt een chatbot de belasting kunnen uitrekenen over een bepaalde prijs, maar de chatbot is slecht in rekenen. Je kunt dan een Tool definieren om het voor de chatbot uit te rekenen, zodat de chatbot de tool kan gebruiken om het juiste antwoordt te krijgen. In code ziet dat er ongeveer zo uit:
+
+```java
+static double BTW = 0.21d;
+
+@Tool("Berekend de BTW op een gegeven prijs")
+double berekenBTW(double prijs){
+    return prijs * BTW;
+}
+```
+
+Als je nu aan de chatbot vraagt om de BTW te berekenen over een bepaalde prijs, kan de chatbot de `berekenBTW(..)` methode aanroepen en het resultaat gebruiken om de gebruiker het juiste antwoord te geven.
+
 
 ## Retrieval Augmented Generation (RAG)
 
