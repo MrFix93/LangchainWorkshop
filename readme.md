@@ -2,13 +2,13 @@
 
 ![Info Support Swagshop](is-swag.jpg)
 
-## Info Support Swagshop
+# Info Support Swagshop
 
 Stel je een webshop voor waar je de meest gave Info Support Swag kunt vinden: denk aan stijlvolle hoodies, unieke gadgets, en toffe accessoires die je met trots kunt dragen op conferenties, bij klanten of gewoon in je vrije tijd. Deze webshop biedt niet alleen de coolste producten, maar maakt het ook super eenvoudig om precies te vinden wat je zoekt.
 
 In deze workshop gaan we aan de slag om een deel van deze webshop te realiseren. We richten ons op het bouwen van een AI-chatbot waarmee je als gebruiker kunt vragen welke producten er beschikbaar zijn en direct bestellingen kunt plaatsen. Daarnaast kun je via de chatbot ook vragen stellen over de producten zelf. Samen werken we toe naar een webshop waar de gaafste Info Support items te koop zijn, zodat jij ze kunt laten zien waar en wanneer je maar wilt. Met behulp van Langchain technologie zullen we deze innovatieve en interactieve winkelervaring creëren.
 
-## Wat is LangChain4j?
+# Wat is LangChain4j?
 
 LangChain4j is een library dat helpt met het integreren van Artificial Intelligence (AI) in je Java project. Het komt met twee grote voordelen:
 
@@ -16,7 +16,9 @@ LangChain4j is een library dat helpt met het integreren van Artificial Intellige
 
 1. Comprehensive Toolbox: LangChain4j komt met een lading verschillende tools en handigheidjes voor ons ontwikkelaars om te gebruiken naar het verlangen van ons hart. Dit gaat van simpele prompt templates tot het opzetten van volwaardig Retrieval-Augmented Generation (RAG).
 
-LangChain4j maakt met het beginnen van AI in Java zo simpel als de volgende paar stappen:
+
+# Basic integratie met Large Language Model (LLM)
+LangChain4j maakt het beginnen met AI in Java zo simpel als de volgende paar stappen:
 
 1. Voeg de LangChain4j dependency, en een LangChain4j model dependeny (zoals OpenAI) toe aan je project. Voorbeeld:
 
@@ -34,7 +36,7 @@ LangChain4j maakt met het beginnen van AI in Java zo simpel als de volgende paar
     </dependency>
    ```
 
-1. Indien van toepassing: verkrijg een API key voor de LLM provider. LangChain4j biedt op hun Github pagina een gratis demo key om met, onder andere, ChatGPT te kunnen testen.
+1. Indien van toepassing: verkrijg een API key voor de LLM provider. LangChain4j biedt op hun Github pagina een gratis demo key om met, onder andere, ChatGPT te kunnen testen (https://github.com/langchain4j/langchain4j).
 1. Creëer een instantie van het gekozen model in je code, en je kunt al beginnen met chatten! Onderstaande code snippet toont hoe je met twee regels code al met ChatGPT kunt chatten in je app!
 
    ```java
@@ -45,10 +47,8 @@ LangChain4j maakt met het beginnen van AI in Java zo simpel als de volgende paar
    System.out.println(answer); // Hello Info Support! It's great to connect with you. How are you doing today?
    ```
 
-LangChain4j Github: https://github.com/langchain4j/langchain4j
 
-
-## Tools (Function Calling)
+# Tools (Function Calling)
 
 Tools (of Function Calling) geeft je LLM de mogelijkheid om een of meer Tools aan te roepen om zo het gewenste resultaat te krijgen. Een Tool is wat je er zelf van maakt: een API aanroep, een database zoekopdracht, een stukje code uitvoeren, etc. De LLM roept de code niet direct aan, het model geeft de intentie aan om een Tool aan te roepen en LangChain4j zorgt ervoor dat de methode uitgevoerd wordt en het resultaat teruggegeven wordt aan de LLM. 
 
@@ -65,8 +65,9 @@ double berekenBTW(double prijs){
 
 Als je nu aan de chatbot vraagt om de BTW te berekenen over een bepaalde prijs, kan de chatbot de `berekenBTW(..)` methode aanroepen en het resultaat gebruiken om de gebruiker het juiste antwoord te geven.
 
+Voor meer informatie over Tools, zie de LangChain4j documentatie: https://docs.langchain4j.dev/tutorials/tools/.
 
-## Retrieval Augmented Generation (RAG)
+# Retrieval Augmented Generation (RAG)
 
 RAG is een combinatie van verschillende technieken om LLM's te voorzien van domein specifieke kennis of particuliere data. Door relevante informatie uit lokale bronnen mee te sturen in de prompt, kan de LLM deze extra informatie gebruiken om een antwoord te formuleren.
 
@@ -80,6 +81,45 @@ De "data retrieval" pipeline.
 
 Zoals je ziet komen er veel onderdelen kijken bij het opzetten van RAG. Gelukkig maakt LangChain4j het sinds kort makkelijk door middel van "EasyRAG".
 
-.......?
+EasyRAG komt als een aparte dependency en is bedoeld om je snel met RAG te laten spelen, zonder al te veel te hoeven nadenken over de ingestion en retrieval pipelines, vector stores of embedding models. Verwijs simpelweg naar de documenten en LangChain4j verzorgt de rest.
 
-Langchain4j RAG docs: https://docs.langchain4j.dev/tutorials/rag/
+De LangChain4j documentatie bevat de nodige stappen om aan de slag te gaan met EasyRAG: https://docs.langchain4j.dev/tutorials/rag#easy-rag
+
+
+
+# De opdracht
+
+## Tools
+
+Zorg ervoor dat je de volgende handelingen, met behulp van de chatbot, kunt doen in de applicatie:
+1. ...
+2. ...
+3. ...
+4. ...
+5. ...
+
+Alle nodige methodes zijn aanwezig, je moet enkel de Tools opzetten.
+
+## RAG
+
+Zorg ervoor dat je de chatbot vragen kunt stellen over de Info Support swag shop voorwerpen. Gebruik hiervoor LangChain4j's EasyRAG oplossing.
+
+Voorbeelden van vragen die de chatbot moet kunnen beantwoorden:
+- **Vraag**: Wat is de prijs van een hoodie?
+- **Antwoord**: 45 euro.
+
+
+- **Vraag**: Waar kan ik de gratis poster ophalen?
+- **Antwoord**: bij binnenkomst, bij de balie.
+
+ 
+- **Vraag**: Hoe kom ik aan een gouden sleutelhanger? 
+- **Antwoord**: alleen op verzoek
+
+ 
+- **Vraag**: Welke maten t-shirts zijn nog beschikbaar? 
+- **Antwoord**: Alles van XS t/m XXL, met uitzondering van L.
+
+
+- **Vraag**: Hoeveel kost de 16 TB USB-stick? 
+- **Antwoord**: 160 euro

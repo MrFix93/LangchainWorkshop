@@ -20,15 +20,18 @@ public class Configuration {
         var embeddingStore = loadEmbeddingStore("src/main/resources/voorwerpen");
 
         return AiServices.builder(Assistant.class)
+                // Het bouwen van de Large Language Model, in dit geval is er gekozen voor OpenAI's ChatGPT
                 .chatLanguageModel(OpenAiChatModel.builder()
-                        // Tools only work with paid openai license, this is not documented anywhere...
+                        // Tools en RAG werken alleen met betaalde API keys
                         .apiKey("")
                         .modelName(OpenAiChatModelName.GPT_4)
                         .temperature(0d)
                         .build())
+                // Een system message, hiermee geven we de chatbot wat achtergrond informatie en hoe deze moet reageren
                 .systemMessageProvider((var x) -> "Je bent de chatbot voor de Info Support swag shop, een digitale winkel! Houdt antwoorden vriendelijk maar kort")
                 .tools(new KlantTools())
                 .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
+                // In-memory chat geheugen, zodat chatbot context heeft van afgelopen 5 berichten.
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(5))
                 .build();
     }
