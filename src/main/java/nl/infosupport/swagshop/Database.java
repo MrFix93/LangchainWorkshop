@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 class Database {
-    private static List<Order> orders = new ArrayList<>();
-    private static List<Klant> klants = new ArrayList<>();
-    private static List<Product> products = new ArrayList<>();
-    private static AtomicInteger productId = new AtomicInteger(0);
-    private static AtomicInteger klantId = new AtomicInteger(0);
-    private static AtomicInteger orderId = new AtomicInteger(0);
+    private static final List<Order> orders = new ArrayList<>();
+    private static final List<Klant> klants = new ArrayList<>();
+    private static final List<Product> products = new ArrayList<>();
+    private static final AtomicInteger productId = new AtomicInteger(0);
+    private static final AtomicInteger klantId = new AtomicInteger(0);
+    private static final AtomicInteger orderId = new AtomicInteger(0);
 
     private static Database database;
 
