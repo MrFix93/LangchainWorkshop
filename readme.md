@@ -64,6 +64,7 @@ double berekenBTW(double prijs){
 ```
 
 Als je nu aan de chatbot vraagt om de BTW te berekenen over een bepaalde prijs, kan de chatbot de `berekenBTW(..)` methode aanroepen en het resultaat gebruiken om de gebruiker het juiste antwoord te geven.
+Het is mogelijk extra context aan het model te geven via de ```@P(..)``` annotatie op de Tool parameter(s).
 
 Voor meer informatie over Tools, zie de LangChain4j documentatie: https://docs.langchain4j.dev/tutorials/tools/.
 
@@ -83,7 +84,23 @@ Zoals je ziet komen er veel onderdelen kijken bij het opzetten van RAG. Gelukkig
 
 EasyRAG komt als een aparte dependency en is bedoeld om je snel met RAG te laten spelen, zonder al te veel te hoeven nadenken over de ingestion en retrieval pipelines, vector stores of embedding models. Verwijs simpelweg naar de documenten en LangChain4j verzorgt de rest.
 
-De LangChain4j documentatie bevat de nodige stappen om aan de slag te gaan met EasyRAG: https://docs.langchain4j.dev/tutorials/rag#easy-rag
+Om aan de slag te gaan met EasyRAG moet de Assistant met de volgende onderdelen uitgebreid worden:
+1. Het laden van je documenten:
+```java
+List<Document> documents = FileSystemDocumentLoader.loadDocuments("/path/to/files");
+```
+2. Het aanmaken van een embedding store en het vullen ervan:
+```java
+InMemoryEmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
+EmbeddingStoreIngestor.ingest(documents, embeddingStore);
+```
+3. Je AIService uitbreiden met de embedding store:
+```java
+.contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
+```
+
+
+Je kunt de nodige stappen voor EasyRAG hier teruglezen: https://docs.langchain4j.dev/tutorials/rag#easy-rag
 
 
 
@@ -91,18 +108,44 @@ De LangChain4j documentatie bevat de nodige stappen om aan de slag te gaan met E
 
 ## Tools
 
-Zorg ervoor dat je de volgende handelingen, met behulp van de chatbot, kunt doen in de applicatie:
-1. ...
-2. ...
-3. ...
-4. ...
-5. ...
+Zorg ervoor dat je de volgende handelingen, met behulp van de chatbot, kunt uitvoeren via de chat:
+1. Haal alle producten op
+2. Aanmaken van een nieuwe klant en het ophalen ervan via naam of id.
+3. Haal een product via naam of id op
+4. Maak een nieuwe order aan
+5. Update een bestaande order met een extra orderline.
+6. Vraag de totale prijs van een bestelling op
 
 Alle nodige methodes zijn aanwezig, je moet enkel de Tools opzetten.
 
 ## RAG
 
+In de resources directory hebben we tekst bestanden met beschrijvingen en informatie over de voorwerpen.
+
 Zorg ervoor dat je de chatbot vragen kunt stellen over de Info Support swag shop voorwerpen. Gebruik hiervoor LangChain4j's EasyRAG oplossing.
+
+Je kunt het aanmaken en ingesten van de embedding store simpel in één methode plaatsen:
+```java
+    private static InMemoryEmbeddingStore<TextSegment> loadEmbeddingStore(String path) {
+        InMemoryEmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
+        List<Document> documents = FileSystemDocumentLoader.loadDocuments(path);
+        EmbeddingStoreIngestor.ingest(documents, embeddingStore);
+        return embeddingStore;
+    }
+```
+
+Deze kun je vervolgens zo aanmaken en gebruiken:
+```java
+  var embeddingStore = loadEmbeddingStore("path/to/files");
+
+  return AiServices.builder(Assistant.class)
+     ...
+     .tools(new KlantTools())
+     .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
+     ...
+     .build();
+```
+
 
 Voorbeelden van vragen die de chatbot moet kunnen beantwoorden:
 - **Vraag**: Wat is de prijs van een hoodie?

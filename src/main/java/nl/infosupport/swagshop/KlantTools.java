@@ -2,7 +2,7 @@ package nl.infosupport.swagshop;
 
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
-import nl.infosupport.swagshop.model.Klant;
+import nl.infosupport.swagshop.model.Customer;
 import nl.infosupport.swagshop.model.Order;
 import nl.infosupport.swagshop.model.OrderLine;
 import nl.infosupport.swagshop.model.Product;
@@ -11,41 +11,45 @@ import java.util.List;
 
 class KlantTools {
 
-    private static final Database database = Database.getDatabase()
-            .init();
+    private static final Database database = Database.init();
 
-    @Tool("Creates and returns a new customer, requires customer name as input")
-    Klant createCustomer(String name) {
-        return database.createNewKlant(name);
+    @Tool("Creates and returns a new customer")
+    Customer createCustomer(@P("Customer name") String name) {
+        return database.createNewCustomer(name);
     }
 
-    @Tool("Get customer ID by name, requires customer name as input")
-    int getCustomerId(String customerName) {
-        return database.getCustomerByName(customerName).id();
+    @Tool("Searches and returns a customer")
+    Customer getCustomerByName(@P("Customer name") String name) {
+        return database.getCustomerByName(name);
     }
 
-    @Tool("Get customer by ID, requires customer ID as input")
-    Klant getCustomerById(int id) {
-        return database.getCustomerById(id);
+    @Tool("Searches for product by name")
+    Product getProductByName(@P("Product name") String name) {
+        return database.getProductByName(name);
     }
 
-    @Tool("get customer orders by customer name, requires customer name as input")
-    List<Order> getCustomerOrders(String customerName) {
-        return database.getOrdersByKlant(database.getCustomerByName(customerName));
+    @Tool("Create a new order for Customer")
+    int createOrder(@P("Customer with ID and Name") Customer customer,
+                    @P("Requested product") Product product,
+                    int quantity) {
+        return database.createNewOrder(customer, new OrderLine(quantity, product));
     }
 
-    @Tool("Create an order for a Klant, requires customer name, product and quantity as input, returns order ID")
-    int createOrder(@P(value = "customer with ID and Name", required = true) Klant klant, Product product, int quantity) {
-        return database.saveOrder(klant, List.of(new OrderLine(quantity, product)));
+    @Tool("Add a new orderline to an existing order")
+    boolean updateOrder(@P("The existing order ID") int orderId,
+                        @P("Requested product") Product product,
+                        @P("The amount") int quantity) {
+        return database.updateOrder(orderId, new OrderLine(quantity, product));
     }
 
-    @Tool("Get order by ID, requires order ID as input")
-    Order getOrderById(int orderId) {
-        return database.getOrderById(orderId);
+    @Tool("Get details of an order")
+    Order getOrderById(@P("Order ID")int id) {
+        return database.getOrderById(id);
     }
+
 
     @Tool("Returns all customers in the database")
-    List<Klant> getCustomers() {
+    List<Customer> getCustomers() {
         return database.getKlants();
     }
 

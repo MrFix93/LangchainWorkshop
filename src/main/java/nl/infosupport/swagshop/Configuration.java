@@ -23,7 +23,7 @@ public class Configuration {
                 // Het bouwen van de Large Language Model, in dit geval is er gekozen voor OpenAI's ChatGPT
                 .chatLanguageModel(OpenAiChatModel.builder()
                         // Tools en RAG werken alleen met betaalde API keys
-                        .apiKey("")
+                        .apiKey("API_KEY")
                         .modelName(OpenAiChatModelName.GPT_4)
                         .temperature(0d)
                         .build())

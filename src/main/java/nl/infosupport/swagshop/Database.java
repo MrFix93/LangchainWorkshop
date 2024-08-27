@@ -1,6 +1,6 @@
 package nl.infosupport.swagshop;
 
-import nl.infosupport.swagshop.model.Klant;
+import nl.infosupport.swagshop.model.Customer;
 import nl.infosupport.swagshop.model.Order;
 import nl.infosupport.swagshop.model.OrderLine;
 import nl.infosupport.swagshop.model.Product;
@@ -10,47 +10,75 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 class Database {
-    private static final List<Order> orders = new ArrayList<>();
-    private static final List<Klant> klants = new ArrayList<>();
-    private static final List<Product> products = new ArrayList<>();
-    private static final AtomicInteger productId = new AtomicInteger(0);
-    private static final AtomicInteger klantId = new AtomicInteger(0);
-    private static final AtomicInteger orderId = new AtomicInteger(0);
+    private final List<Order> orders = new ArrayList<>();
+    private final List<Customer> customer = new ArrayList<>();
+    private final List<Product> products = new ArrayList<>();
+    private final AtomicInteger orderId = new AtomicInteger(1);
+    private final AtomicInteger customerId = new AtomicInteger(1);
+    private final AtomicInteger productId = new AtomicInteger(1);
 
-    private static Database database;
+    static Database init() {
+        Database database = new Database();
 
-    public static Database getDatabase() {
-        if (database == null) {
-            database = new Database();
-        }
-        return database;
-    }
-
-    Database init() {
-        database.addProduct("Bike", 500);
-        database.addProduct("Car", 19000);
+        database.addProduct("Hoodie", 45);
+        database.addProduct("Poster", 29.99);
+        database.addProduct("Sleutelhanger", 10);
+        database.addProduct("T-shirt", 25);
+        database.addProduct("USB-stick", 10);
 
         return database;
     }
 
-    Klant createNewKlant(String name) {
-        Klant klant = new Klant(klantId.getAndIncrement(), name);
-        klants.add(klant);
-        return klant;
+    Customer createNewCustomer(String name) {
+        Customer customer = new Customer(customerId.getAndIncrement(), name);
+        this.customer.add(customer);
+        return customer;
     }
 
-    Klant getCustomerByName(String name) {
-        return klants.stream()
-                .filter(klant -> klant.name().equalsIgnoreCase(name))
+    Customer getCustomerByName(String name) {
+        return customer.stream()
+                .filter(customer -> customer.name().equalsIgnoreCase(name))
                 .findFirst()
                 .orElseThrow();
     }
 
-    Klant getCustomerById(int id) {
-        return klants.stream()
-                .filter(klant -> klant.id() == id)
+    Customer getCustomerById(int id) {
+        return customer.stream()
+                .filter(customer -> customer.id() == id)
                 .findFirst()
                 .orElseThrow();
+    }
+
+    Product getProductByName(String name) {
+        return products.stream()
+                .filter(product -> product.name().equalsIgnoreCase(name))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    Product getProductById(int id) {
+        return products.stream()
+                .filter(product -> product.id() == id)
+                .findFirst()
+                .orElseThrow();
+    }
+
+
+    int createNewOrder(Customer customer, OrderLine orderLine) {
+        int id = orderId.getAndIncrement();
+        orders.add(new Order(id, customer, List.of(orderLine)));
+        return id;
+    }
+
+    boolean updateOrder(int orderId, OrderLine orderLine) {
+        Order order = orders.stream()
+                .filter(o -> o.id() == orderId)
+                .findFirst()
+                .orElseThrow();
+
+        orders.remove(order);
+        Order newOrder = order.addOrderLine(orderLine);
+        return orders.add(newOrder);
     }
 
     Order getOrderById(int orderId) {
@@ -60,33 +88,21 @@ class Database {
                 .orElseThrow();
     }
 
-    List<Order> getOrdersByKlant(Klant klant) {
-        return orders.stream()
-                .filter(order -> order.klant().equals(klant))
-                .toList();
-    }
-
-    List<Product> getAllProducts() {
-        return products;
-    }
-
-    int addProduct(String productName, double price) {
+    private int addProduct(String productName, double price) {
         int id = productId.getAndIncrement();
         products.add(new Product(id, productName, price));
         return id;
     }
 
-    int saveOrder(Klant klant, List<OrderLine> orderLines) {
-        int id = orderId.getAndIncrement();
-        orders.add(new Order(id, klant, orderLines));
-        return id;
-    }
-
-    List<Klant> getKlants() {
-        return List.copyOf(klants);
+    List<Customer> getKlants() {
+        return List.copyOf(customer);
     }
 
     List<Order> getOrders() {
         return List.copyOf(orders);
+    }
+
+    List<Product> getAllProducts() {
+        return List.copyOf(products);
     }
 }
