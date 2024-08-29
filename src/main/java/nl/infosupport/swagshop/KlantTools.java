@@ -7,11 +7,10 @@ import nl.infosupport.swagshop.model.Order;
 import nl.infosupport.swagshop.model.OrderLine;
 import nl.infosupport.swagshop.model.Product;
 
-import java.util.List;
-
 class KlantTools {
 
     private static final Database database = Database.init();
+    private static final double TAX = 1.21d;
 
     @Tool("Creates and returns a new customer")
     Customer createCustomer(@P("Customer name") String name) {
@@ -35,7 +34,7 @@ class KlantTools {
         return database.createNewOrder(customer, new OrderLine(quantity, product));
     }
 
-    @Tool("Add a new orderline to an existing order")
+    @Tool("Add a new orderline to an existing order, returns boolean indicating success or failure")
     boolean updateOrder(@P("The existing order ID") int orderId,
                         @P("Requested product") Product product,
                         @P("The amount") int quantity) {
@@ -43,23 +42,17 @@ class KlantTools {
     }
 
     @Tool("Get details of an order")
-    Order getOrderById(@P("Order ID")int id) {
+    Order getOrderById(@P("Order ID") int id) {
         return database.getOrderById(id);
     }
 
-
-    @Tool("Returns all customers in the database")
-    List<Customer> getCustomers() {
-        return database.getKlants();
-    }
-
-    @Tool("Returns all orders in the database")
-    List<Order> getOrders() {
-        return database.getOrders();
-    }
-
-    @Tool("Returns all Products in the database")
-    List<Product> getProducts() {
-        return database.getAllProducts();
+    @Tool("Calculates totale price of order including tax")
+    double getTotalOrderPrice(@P("Order ID") int id) {
+        return database.getOrderById(id)
+                .orderLines()
+                .stream()
+                .mapToDouble(o -> o.product().price() * o.quantity())
+                .map(p -> p * TAX)
+                .sum();
     }
 }

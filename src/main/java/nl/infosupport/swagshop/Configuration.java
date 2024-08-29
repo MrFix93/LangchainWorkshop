@@ -17,7 +17,7 @@ public class Configuration {
 
     static Assistant assistant() {
 
-        var embeddingStore = loadEmbeddingStore("src/main/resources/voorwerpen");
+//        var embeddingStore = loadEmbeddingStore("src/main/resources/voorwerpen");
 
         return AiServices.builder(Assistant.class)
                 // Het bouwen van de Large Language Model, in dit geval is er gekozen voor OpenAI's ChatGPT
@@ -30,9 +30,9 @@ public class Configuration {
                 // Een system message, hiermee geven we de chatbot wat achtergrond informatie en hoe deze moet reageren
                 .systemMessageProvider((var x) -> "Je bent de chatbot voor de Info Support swag shop, een digitale winkel! Houdt antwoorden vriendelijk maar kort")
                 .tools(new KlantTools())
-                .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
-                // In-memory chat geheugen, zodat chatbot context heeft van afgelopen 5 berichten.
-                .chatMemory(MessageWindowChatMemory.withMaxMessages(5))
+//                .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
+                // In-memory chat geheugen, zodat chatbot context heeft van afgelopen 10 berichten.
+                .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();
     }
 

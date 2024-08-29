@@ -106,17 +106,25 @@ Je kunt de nodige stappen voor EasyRAG hier teruglezen: https://docs.langchain4j
 
 # De opdracht
 
+Nu is het tijd om zelf aan de slag te gaan met Tools en RAG!
+
 ## Tools
 
-Zorg ervoor dat je de volgende handelingen, met behulp van de chatbot, kunt uitvoeren via de chat:
-1. Haal alle producten op
-2. Aanmaken van een nieuwe klant en het ophalen ervan via naam of id.
-3. Haal een product via naam of id op
-4. Maak een nieuwe order aan
-5. Update een bestaande order met een extra orderline.
-6. Vraag de totale prijs van een bestelling op
+Breidt ```KlantTools.java``` uit zodat je de volgende handelingen, met behulp van de chatbot, kunt uitvoeren via de chat:
+1. Aanmaken van een nieuwe klant en het ophalen ervan via naam of id.
+2. Haal een product via naam of id op. 
+3. Maak een nieuwe order aan.
+4. Update een bestaande order met een extra orderline.
+5. (Extra): Zorg dat de chatbot de totaalprijs van een bestelling kan teruggeven (incl. 21% btw!).
 
-Alle nodige methodes zijn aanwezig, je moet enkel de Tools opzetten.
+Alle nodige methodes zijn aanwezig, je moet enkel de Tools schrijven.
+
+Tip voor het gebruiken van productnamen: gebruik de namen zoals te vinden in ```Database.init()```
+
+### Benieuwd wat LangChain4j onderwater aan het doen is?
+Je kunt de berichten die LangChain4j lokaal heen en weer stuurt met het model van keuze inzichtelijk krijgen door:
+- In ```simplelogger.properties``` bestand loglevel op ```debug``` te zetten.
+- In ```Configuration.java``` bij het aanmaken van het model, ```logRequests(..)``` en/of ```logResponses(..)``` op true te zetten.
 
 ## RAG
 
