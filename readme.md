@@ -247,7 +247,7 @@ EasyRAG komt als een aparte dependency en is bedoeld om je snel met RAG te laten
 </dependency>
 ```
 
-> ![NOTE]
+> [!NOTE]
 > 
 > Voeg de LangChain4j EasyRAG dependency toe aan het project
 
@@ -272,7 +272,7 @@ EmbeddingStoreIngestor.ingest(documents, embeddingStore);
 .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
 ```
 
-> ![NOTE]
+> [!NOTE]
 > 
 > In de resources directory hebben we tekst bestanden met beschrijvingen en informatie over de voorwerpen.
 > Voer de bovenstaande drie stappen uit om jouw chatbot RAG mogelijkheden te geven:
