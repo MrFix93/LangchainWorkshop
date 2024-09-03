@@ -31,8 +31,8 @@ public class Configuration {
                 .systemMessageProvider((var x) -> "Je bent de chatbot voor de Info Support swag shop, een digitale winkel! Houdt antwoorden vriendelijk maar kort")
                 .tools(new KlantTools())
                 .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
-                // In-memory chat geheugen, zodat chatbot context heeft van afgelopen 5 berichten.
-                .chatMemory(MessageWindowChatMemory.withMaxMessages(5))
+                // In-memory chat geheugen, zodat chatbot context heeft van afgelopen 10 berichten.
+                .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();
     }
 

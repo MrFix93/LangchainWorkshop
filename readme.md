@@ -97,11 +97,11 @@ AI Services beschermt ons tegen vervelende boilerplate en zorgt ervoor dat we ge
 ```java
 AiServices.builder(Assistant.class)
     .chatLanguageModel(OpenAiChatModel.builder()
-    .apiKey("API_KEY")
-    .modelName(OpenAiChatModelName.GPT_4)
-    .build())
-.chatMemory(MessageWindowChatMemory.withMaxMessages(5))
-.build();
+       .apiKey("API_KEY")
+       .modelName(OpenAiChatModelName.GPT_4)
+       .build())
+   .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
+   .build();
 ```
 
 > [!IMPORTANT]
@@ -203,12 +203,25 @@ Vervolgens configureren we onze AI-services om te vertellen van welke tools de A
 > [!NOTE]
 > Implementeer functionaliteit in de `KlantTools`-classe. Maak gebruik van de in-memory database zoals geimplementeerd in de `Database`-classe. Je kunt denken aan de volgende functionaliteiten:
 >
-> 1. Haal alle producten op
-> 2. Aanmaken van een nieuwe klant en het ophalen ervan via naam of id.
-> 3. Haal een product via naam of id op
-> 4. Maak een nieuwe order aan
-> 5. Update een bestaande order met een extra orderline.
-> 6. Vraag de totale prijs van een bestelling op
+> 1. Aanmaken van een nieuwe klant en het ophalen ervan via naam of id.
+> 2. Haal een product via naam of id op.
+> 3. Maak een nieuwe order aan.
+> 4. Update een bestaande order met een extra orderline.
+> 5. (Extra): Zorg dat de chatbot de totaalprijs van een bestelling kan teruggeven (incl. 21% btw!).
+>
+> Alle nodige methodes zijn aanwezig, je hoeft enkel de Tools te schrijven.
+
+<details>
+<summary>Benieuwd wat LangChain4j onderwater aan het doen is?</summary>
+
+Je kunt de berichten die LangChain4j lokaal heen en weer stuurt met het model inzichtelijk krijgen door:
+- In ```simplelogger.properties``` bestand loglevel op ```debug``` te zetten.
+- In ```Configuration.java``` bij het aanmaken van het model, ```logRequests(..)``` en/of ```logResponses(..)``` op true te zetten.
+
+</details>
+
+
+
 
 # Retrieval Augmented Generation (RAG)
 
@@ -225,6 +238,18 @@ De "data retrieval" pipeline.
 Zoals je ziet komen er veel onderdelen kijken bij het opzetten van RAG. Gelukkig maakt LangChain4j het sinds kort makkelijk door middel van "EasyRAG".
 
 EasyRAG komt als een aparte dependency en is bedoeld om je snel met RAG te laten spelen, zonder al te veel te hoeven nadenken over de ingestion en retrieval pipelines, vector stores of embedding models. Verwijs simpelweg naar de documenten en LangChain4j verzorgt de rest.
+
+```xml
+<dependency>
+   <groupId>dev.langchain4j</groupId>
+   <artifactId>langchain4j-easy-rag</artifactId>
+   <version>0.33.0</version>
+</dependency>
+```
+
+> ![NOTE]
+> 
+> Voeg de LangChain4j EasyRAG dependency toe aan het project
 
 Om aan de slag te gaan met EasyRAG moet de Assistant met de volgende onderdelen uitgebreid worden:
 
@@ -247,51 +272,33 @@ EmbeddingStoreIngestor.ingest(documents, embeddingStore);
 .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
 ```
 
+> ![NOTE]
+> 
+> In de resources directory hebben we tekst bestanden met beschrijvingen en informatie over de voorwerpen.
+> Voer de bovenstaande drie stappen uit om jouw chatbot RAG mogelijkheden te geven:
+> 1. Laden van documenten
+> 2. Aanmaken embedding store
+> 3. AI Service uitbreiden met embedding store
+>
+> Voorbeelden van vragen die je chatbot vervolgens kan beantwoorden:
+>
+> - **Vraag**: Wat is de prijs van een hoodie?
+> - **Antwoord**: 45 euro.
+> 
+> 
+> - **Vraag**: Waar kan ik de gratis poster ophalen?
+> - **Antwoord**: bij binnenkomst, bij de balie.
+> 
+> 
+> - **Vraag**: Hoe kom ik aan een gouden sleutelhanger?
+> - **Antwoord**: alleen op verzoek
+> 
+> 
+> - **Vraag**: Welke maten t-shirts zijn nog beschikbaar?
+> - **Antwoord**: Alles van XS t/m XXL, met uitzondering van L.
+> 
+> 
+> - **Vraag**: Hoeveel kost de 16 TB USB-stick?
+> - **Antwoord**: 160 euro
+
 Je kunt de nodige stappen voor EasyRAG hier teruglezen: https://docs.langchain4j.dev/tutorials/rag#easy-rag
-
-## RAG
-
-In de resources directory hebben we tekst bestanden met beschrijvingen en informatie over de voorwerpen.
-
-Zorg ervoor dat je de chatbot vragen kunt stellen over de Info Support swag shop voorwerpen. Gebruik hiervoor LangChain4j's EasyRAG oplossing.
-
-Je kunt het aanmaken en ingesten van de embedding store simpel in één methode plaatsen:
-
-```java
-    private static InMemoryEmbeddingStore<TextSegment> loadEmbeddingStore(String path) {
-        InMemoryEmbeddingStore<TextSegment> embeddingStore = new InMemoryEmbeddingStore<>();
-        List<Document> documents = FileSystemDocumentLoader.loadDocuments(path);
-        EmbeddingStoreIngestor.ingest(documents, embeddingStore);
-        return embeddingStore;
-    }
-```
-
-Deze kun je vervolgens zo aanmaken en gebruiken:
-
-```java
-  var embeddingStore = loadEmbeddingStore("path/to/files");
-
-  return AiServices.builder(Assistant.class)
-     ...
-     .tools(new KlantTools())
-     .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
-     ...
-     .build();
-```
-
-Voorbeelden van vragen die de chatbot moet kunnen beantwoorden:
-
-- **Vraag**: Wat is de prijs van een hoodie?
-- **Antwoord**: 45 euro.
-
-- **Vraag**: Waar kan ik de gratis poster ophalen?
-- **Antwoord**: bij binnenkomst, bij de balie.
-
-- **Vraag**: Hoe kom ik aan een gouden sleutelhanger?
-- **Antwoord**: alleen op verzoek
-
-- **Vraag**: Welke maten t-shirts zijn nog beschikbaar?
-- **Antwoord**: Alles van XS t/m XXL, met uitzondering van L.
-
-- **Vraag**: Hoeveel kost de 16 TB USB-stick?
-- **Antwoord**: 160 euro
