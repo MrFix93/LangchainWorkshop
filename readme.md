@@ -199,12 +199,12 @@ Vervolgens configureren we onze AI-services om te vertellen van welke tools de A
 ```java
 .tools(new KlantTools())
 ```
+> [!IMPORTANT]
+>
+> Voor de volgende opdrachten, vermijdt Method-overloading, het model kan daar niet goed mee overweg.
 
 > [!NOTE]
 > Implementeer functionaliteit in de `KlantTools`-classe. Maak gebruik van de in-memory database zoals geimplementeerd in de `Database`-classe. Je kunt denken aan de volgende functionaliteiten:
-> > [!IMPORTANT]
-> > 
-> >Vermijdt Method-overloading, daar lijkt het model momenteel niet goed mee overweg te kunnen. 
 > 1. Aanmaken van een nieuwe klant en het ophalen ervan via naam of id.
 > 2. Haal een product via naam of id op.
 > 3. Maak een nieuwe order aan; gebruik een Customer, Product en quantity als parameters.
