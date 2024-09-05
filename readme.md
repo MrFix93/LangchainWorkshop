@@ -304,7 +304,8 @@ EmbeddingStoreIngestor.ingest(documents, embeddingStore);
 Je kunt de nodige stappen voor EasyRAG hier teruglezen: https://docs.langchain4j.dev/tutorials/rag#easy-rag
 
 # Extra: Image Generation
-Het is sinds kort ook mogelijk om foto's te genereren via ChatGPT 4. Dat kun je hier ook via code doen. Probeer daar eens mee te spelen en zie wat je daaruit mee kan toveren. Dat zit ook mee in LangChain4j.
-> Tip: In ChatGPT kun je gewoon prompten en een foto krijgen net zoals bij tekst, maar achterliggend werkt dat met een volledig ander model.
+Het is nu ook mogelijk om beelden te genereren via ChatGPT 4, en dat kun je hier direct via code doen. Probeer het eens uit en ontdek wat je ermee kunt maken. Deze functionaliteit is ook geïntegreerd in LangChain4j.
 
-> Opgelet: Dit gebruikt best veel tokens, dus ongecontrolleerd gebruik hiervan kan snel duur worden.
+>Tip: In ChatGPT kun je gewoon een prompt invoeren om een beeld te genereren, net zoals je dat doet voor tekst. Achter de schermen werkt dit echter met een compleet ander model.
+
+>Let op: Dit kan behoorlijk veel tokens verbruiken, dus ongeremd gebruik kan snel prijzig worden.
