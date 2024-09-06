@@ -27,7 +27,6 @@ public class Configuration {
                         .build())
                 // Een system message, hiermee geven we de chatbot wat achtergrond informatie en hoe deze moet reageren
                 .systemMessageProvider((var x) -> "Je bent de chatbot voor de Info Support swag shop, een digitale winkel! Houdt antwoorden vriendelijk maar kort")
-                .tools(new KlantTools())
                 // In-memory chat geheugen, zodat chatbot context heeft van afgelopen 10 berichten.
                 .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
                 .build();
