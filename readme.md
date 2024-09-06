@@ -177,7 +177,7 @@ double berekenBTW(double prijs){
 Een Tool bestaat uit een methode, `double berekenBTW(double prijs)`, een `@Tool`-annotatie en een implementatie. In de `@Tool()`-annotatie vertel je aan Langchain wat deze methode doet.
 
 Als je nu aan de chatbot vraagt om de BTW te berekenen over een bepaalde prijs, kan de chatbot de `berekenBTW(..)` methode aanroepen en het resultaat gebruiken om de gebruiker het juiste antwoord te geven.
-Het is mogelijk extra context aan het model te geven via de `@P(..)` annotatie op de Tool parameter(s).
+Het is mogelijk extra context aan het model te geven via de `@P(..)` annotatie op een of meerdere Tool parameter(s).
 
 Voor meer informatie over Tools, zie de LangChain4j documentatie: https://docs.langchain4j.dev/tutorials/tools/.
 
@@ -199,14 +199,16 @@ Vervolgens configureren we onze AI-services om te vertellen van welke tools de A
 ```java
 .tools(new KlantTools())
 ```
+> [!IMPORTANT]
+>
+> Voor de volgende opdrachten, vermijdt Method-overloading, het model kan daar niet goed mee overweg.
 
 > [!NOTE]
 > Implementeer functionaliteit in de `KlantTools`-classe. Maak gebruik van de in-memory database zoals geimplementeerd in de `Database`-classe. Je kunt denken aan de volgende functionaliteiten:
->
 > 1. Aanmaken van een nieuwe klant en het ophalen ervan via naam of id.
 > 2. Haal een product via naam of id op.
-> 3. Maak een nieuwe order aan.
-> 4. Update een bestaande order met een extra orderline.
+> 3. Maak een nieuwe order aan; gebruik een Customer, Product en quantity als parameters.
+> 4. Update een bestaande order met een extra orderline; gebruik een order ID, Product en quantity als parameters.
 > 5. (Extra): Zorg dat de chatbot de totaalprijs van een bestelling kan teruggeven (incl. 21% btw!).
 >
 > Alle nodige methodes zijn aanwezig, je hoeft enkel de Tools te schrijven.
@@ -271,6 +273,10 @@ EmbeddingStoreIngestor.ingest(documents, embeddingStore);
 ```java
 .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
 ```
+
+> [!IMPORTANT]
+> 
+> Zet je Tools voor de volgende opdracht tijdelijk uit omdat beide Tools en RAG met producten werken, en dat kan de resultaten van het model negatief beïnvloeden.
 
 > [!NOTE]
 > 
