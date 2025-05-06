@@ -99,7 +99,7 @@ AI Services beschermt ons tegen vervelende boilerplate en zorgt ervoor dat we ge
 
 ```java
 AiServices.builder(Assistant.class)
-    .chatLanguageModel(OpenAiChatModel.builder()
+    .chatModel(OpenAiChatModel.builder()
        .apiKey("API_KEY")
        .modelName(OpenAiChatModelName.GPT_4)
        .build())
